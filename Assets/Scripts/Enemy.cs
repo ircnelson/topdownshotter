@@ -1,14 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Enemy : MonoBehaviour
+public class Enemy : LivingEntity
 {
     private NavMeshAgent _pathFinder;
     private Transform _target;
 
-	void Start ()
+    public void TakeHit(float demage, RaycastHit hit)
     {
+        throw new NotImplementedException();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
         _pathFinder = GetComponent<NavMeshAgent>();
 
         _target = GameObject.FindGameObjectWithTag("Player").transform;
@@ -28,7 +36,11 @@ public class Enemy : MonoBehaviour
         while (_target != null)
         {
             Vector3 targetPosition = new Vector3(_target.position.x, 0, _target.position.z);
-            _pathFinder.SetDestination(targetPosition);
+
+            if (!Dead)
+            {
+                _pathFinder.SetDestination(targetPosition);
+            }
 
             yield return new WaitForSeconds(refreshRate);
         }

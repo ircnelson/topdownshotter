@@ -1,18 +1,19 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 [RequireComponent(typeof(PlayerComponent))]
 [RequireComponent(typeof(GunController))]
-public class Player : MonoBehaviour
+public class Player : LivingEntity
 {
     public float MoveSpeed = 5;
 
     private Camera _viewCamera;
     private PlayerComponent _playerController;
     private GunController _gunController;
-	
-	void Start ()
+
+    protected override void Start()
     {
+        base.Start();
+
         _playerController = GetComponent<PlayerComponent>();
         _gunController = GetComponent<GunController>();
 
