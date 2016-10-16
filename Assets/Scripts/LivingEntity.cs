@@ -17,12 +17,7 @@ public abstract class LivingEntity : MonoBehaviour, IDamageable
 
     public void TakeHit(float damage, RaycastHit hit)
     {
-        Health -= damage;
-
-        if (Health <= 0 && !Dead)
-        {
-            Die();
-        }
+        TakeDamage(damage);
     }
 
     private void Die()
@@ -35,5 +30,15 @@ public abstract class LivingEntity : MonoBehaviour, IDamageable
         }
 
         GameObject.Destroy(gameObject);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        Health -= damage;
+
+        if (Health <= 0 && !Dead)
+        {
+            Die();
+        }
     }
 }

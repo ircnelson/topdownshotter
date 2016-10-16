@@ -15,6 +15,7 @@ public class Enemy : LivingEntity
     private float _attackDistanceThreshold = .5F;
     // attack interval (in milleseconds)
     private float _timeBetweenAttack = 1;
+    private float _damage = 1;
 
     private float _nextAttackTime;
 
@@ -24,6 +25,9 @@ public class Enemy : LivingEntity
     private float _myCollisionRadius;
     private float _targetCollisionRadius;
 
+    private LivingEntity _targetEntity;
+    private bool _hasTarget;
+
     protected override void Start()
     {
         base.Start();
@@ -31,28 +35,38 @@ public class Enemy : LivingEntity
         _pathFinder = GetComponent<NavMeshAgent>();
         _skinMaterial = GetComponent<Renderer>().material;
         _originalColor = _skinMaterial.color;
+        
+        if (GameObject.FindGameObjectWithTag("Player") != null)
+        {
+            _currentState = State.Chasing;
+            
+            _target = GameObject.FindGameObjectWithTag("Player").transform;
+            _targetEntity = _target.GetComponent<LivingEntity>();
+            _targetEntity.OnDeath += OnTargetDeath;
 
-        _currentState = State.Chasing;
+            _hasTarget = true;
 
-        _target = GameObject.FindGameObjectWithTag("Player").transform;
+            _myCollisionRadius = GetComponent<CapsuleCollider>().radius;
+            _targetCollisionRadius = _target.GetComponent<CapsuleCollider>().radius;
 
-        _myCollisionRadius = GetComponent<CapsuleCollider>().radius;
-        _targetCollisionRadius = _target.GetComponent<CapsuleCollider>().radius;
-
-        StartCoroutine(UpdatePath());
+            StartCoroutine(UpdatePath());
+        }
     }
-
+    
     void Update()
     {
-        if (Time.time > _nextAttackTime)
+        if (_hasTarget)
         {
-            float sqrDistanceToTarget = (_target.position - transform.position).sqrMagnitude;
-
-            if (sqrDistanceToTarget < Mathf.Pow(_attackDistanceThreshold + _myCollisionRadius + _targetCollisionRadius, 2))
+            if (Time.time > _nextAttackTime)
             {
-                _nextAttackTime = Time.time + _timeBetweenAttack;
+                float sqrDistanceToTarget = (_target.position - transform.position).sqrMagnitude;
 
-                StartCoroutine(Attack());
+                if (sqrDistanceToTarget < Mathf.Pow(_attackDistanceThreshold + _myCollisionRadius + _targetCollisionRadius, 2))
+                {
+                    _nextAttackTime = Time.time + _timeBetweenAttack;
+
+                    StartCoroutine(Attack());
+                }
             }
         }
     }
@@ -71,9 +85,15 @@ public class Enemy : LivingEntity
         float attackSpeed = 3;
 
         _skinMaterial.color = Color.red;
+        bool hasAppliedDamage = false;
 
         while (percent <= 1)
         {
+            if (percent >= .5f && !hasAppliedDamage)
+            {
+                hasAppliedDamage = true;
+                _targetEntity.TakeDamage(_damage);
+            }
             percent += Time.deltaTime * attackSpeed;
 
             float interpolation = (-Mathf.Pow(percent, 2) + percent) * 4;
@@ -92,7 +112,7 @@ public class Enemy : LivingEntity
     {
         float refreshRate = .25f;
 
-        while (_target != null)
+        while (_hasTarget)
         {
             if (_currentState == State.Chasing)
             {
@@ -108,5 +128,11 @@ public class Enemy : LivingEntity
 
             yield return new WaitForSeconds(refreshRate);
         }
+    }
+
+    private void OnTargetDeath()
+    {
+        _hasTarget = false;
+        _currentState = State.Idle;
     }
 }
