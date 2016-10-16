@@ -2,27 +2,32 @@
 using System.Collections;
 
 [RequireComponent(typeof(PlayerComponent))]
-public class Player : MonoBehaviour {
-
+[RequireComponent(typeof(GunController))]
+public class Player : MonoBehaviour
+{
     public float MoveSpeed = 5;
 
     private Camera _viewCamera;
-    private PlayerComponent _controller;
+    private PlayerComponent _playerController;
+    private GunController _gunController;
 	
 	void Start ()
     {
-        _controller = GetComponent<PlayerComponent>();
+        _playerController = GetComponent<PlayerComponent>();
+        _gunController = GetComponent<GunController>();
 
         _viewCamera = Camera.main;
 	}
 	
 	void Update ()
     {
+        // Movement
         Vector3 moveInput = new Vector3(Input.GetAxisRaw("Horizontal"), 0, Input.GetAxisRaw("Vertical"));
         Vector3 moveVelocity = moveInput.normalized * MoveSpeed;
 
-        _controller.Move(moveVelocity);
+        _playerController.Move(moveVelocity);
 
+        // Look
         Ray ray = _viewCamera.ScreenPointToRay(Input.mousePosition);
 
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
@@ -35,7 +40,13 @@ public class Player : MonoBehaviour {
 
             Debug.DrawLine(ray.origin, point, Color.red);
 
-            _controller.LookAt(point);
+            _playerController.LookAt(point);
+        }
+
+        // Weapon
+        if (Input.GetMouseButton(0))
+        {
+            _gunController.Shoot();
         }
 	}
 }
