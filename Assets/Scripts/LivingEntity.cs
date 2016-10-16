@@ -1,8 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public abstract class LivingEntity : MonoBehaviour, IDamageable
 {
     public float StartHealth;
+
+    public event Action OnDeath;
 
     protected float Health;
     protected bool Dead;
@@ -25,6 +28,11 @@ public abstract class LivingEntity : MonoBehaviour, IDamageable
     private void Die()
     {
         Dead = true;
+
+        if (OnDeath != null)
+        {
+            OnDeath();
+        }
 
         GameObject.Destroy(gameObject);
     }

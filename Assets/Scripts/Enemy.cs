@@ -7,12 +7,7 @@ public class Enemy : LivingEntity
 {
     private NavMeshAgent _pathFinder;
     private Transform _target;
-
-    public void TakeHit(float demage, RaycastHit hit)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     protected override void Start()
     {
         base.Start();
