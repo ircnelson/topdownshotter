@@ -23,6 +23,9 @@ public class MapGenerator : MonoBehaviour
     private List<Coord> _allTileCoords;
     private Queue<Coord> _shuffledTileCoords;
 
+    private Queue<Coord> _shuffledOpenTileCoords;
+    private Transform[,] _tileMap;
+
     Map _currentMap;
 
     void Start()
@@ -34,11 +37,13 @@ public class MapGenerator : MonoBehaviour
     {
         _currentMap = Maps[MapIndex];
 
+        _tileMap = new Transform[_currentMap.MapSize.X, _currentMap.MapSize.Y];
+
         System.Random prng = new System.Random(_currentMap.Seed);
         GetComponent<BoxCollider>().size = new Vector3(_currentMap.MapSize.X * TileSize, .05f, _currentMap.MapSize.Y * TileSize);
 
+        // Generating coords
         _allTileCoords = new List<Coord>();
-
         for (int x = 0; x < _currentMap.MapSize.X; x++)
         {
             for (int y = 0; y < _currentMap.MapSize.Y; y++)
@@ -49,6 +54,7 @@ public class MapGenerator : MonoBehaviour
 
         _shuffledTileCoords = new Queue<Coord>(Utility.ShuffleArray(_allTileCoords.ToArray(), _currentMap.Seed));
 
+        // Create map holder object
         string holderName = "Generated Map";
 
         if (transform.FindChild(holderName))
@@ -59,6 +65,7 @@ public class MapGenerator : MonoBehaviour
         Transform mapHolder = new GameObject(holderName).transform;
         mapHolder.parent = transform;
 
+        // Spawning tiles
         for (int x = 0; x < _currentMap.MapSize.X; x++)
         {
             for (int y = 0; y < _currentMap.MapSize.Y; y++)
@@ -67,16 +74,19 @@ public class MapGenerator : MonoBehaviour
 
                 Transform newTile = Instantiate(TilePrefab, tilePosition, Quaternion.Euler(Vector3.right * 90)) as Transform;
                 newTile.localScale = Vector3.one * (1 - OutlinePercent) * TileSize;
-
                 newTile.parent = mapHolder;
+
+                _tileMap[x, y] = newTile;
             }
         }
 
+        // Spawning obstacles
         bool[,] obstacleMap = new bool[_currentMap.MapSize.X, _currentMap.MapSize.Y];
 
         int obstacleCount = (int)(_currentMap.MapSize.X * _currentMap.MapSize.Y * _currentMap.ObstaclePercent);
-
         int currentObstacleCount = 0;
+
+        var allOpenCoords = new List<Coord>(_allTileCoords);
 
         for (int i = 0; i < obstacleCount; i++)
         {
@@ -99,6 +109,8 @@ public class MapGenerator : MonoBehaviour
                 float colorPercent = randomCoord.Y / (float)_currentMap.MapSize.Y;
                 obstacleMaterial.color = Color.Lerp(_currentMap.ForegroundColor, _currentMap.BackgroundColor, colorPercent);
                 obstacleRenderer.sharedMaterial = obstacleMaterial;
+
+                allOpenCoords.Remove(randomCoord);
             }
             else
             {
@@ -107,9 +119,22 @@ public class MapGenerator : MonoBehaviour
             }
         }
 
+        _shuffledOpenTileCoords = new Queue<Coord>(Utility.ShuffleArray(allOpenCoords.ToArray(), _currentMap.Seed));
+
         CreateBorders(mapHolder);
 
         NavmeshFloor.localScale = new Vector3(MaxMapSize.x, MaxMapSize.y) * TileSize;
+    }
+
+    public Transform GetTileFromPosition(Vector3 position)
+    {
+        int x = Mathf.RoundToInt(position.x / TileSize + (_currentMap.MapSize.X - 1) / 2f);
+        int y = Mathf.RoundToInt(position.z / TileSize + (_currentMap.MapSize.Y - 1) / 2f);
+
+        x = Mathf.Clamp(x, 0, _tileMap.GetLength(0) - 1);
+        y = Mathf.Clamp(y, 0, _tileMap.GetLength(1) - 1);
+
+        return _tileMap[x, y];
     }
 
     public Coord GetRandomCoord()
@@ -119,6 +144,15 @@ public class MapGenerator : MonoBehaviour
         _shuffledTileCoords.Enqueue(randomCoord);
 
         return randomCoord;
+    }
+
+    public Transform GetRandomOpenTile()
+    {
+        Coord randomCoord = _shuffledOpenTileCoords.Dequeue();
+
+        _shuffledTileCoords.Enqueue(randomCoord);
+
+        return _tileMap[randomCoord.X, randomCoord.Y];
     }
 
     private void CreateBorders(Transform mapHolder)
@@ -140,7 +174,7 @@ public class MapGenerator : MonoBehaviour
         maskBottom.parent = mapHolder;
         maskBottom.localScale = new Vector3(MaxMapSize.x, 1f, (MaxMapSize.y - _currentMap.MapSize.Y) / 2f) * TileSize;
     }
-
+    
     private Vector3 CoordToPosition(int x, int y)
     {
         return new Vector3(-_currentMap.MapSize.X / 2f + 0.5f + x, 0, -_currentMap.MapSize.Y / 2f + 0.5f + y) * TileSize;
