@@ -28,8 +28,14 @@ public class MapGenerator : MonoBehaviour
 
     Map _currentMap;
 
-    void Start()
+    void Awake()
     {
+        FindObjectOfType<Spawner>().OnNewWave += OnNewWave;
+    }
+
+    void OnNewWave(int waveNumber)
+    {
+        MapIndex = waveNumber - 1;
         GenerateMap();
     }
 
@@ -222,7 +228,7 @@ public class MapGenerator : MonoBehaviour
 
         return targetAccessibleTileCount == accessibleTileCount;
     }
-
+    
     [Serializable]
     public struct Coord
     {

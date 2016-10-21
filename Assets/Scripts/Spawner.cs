@@ -7,6 +7,8 @@ public class Spawner : MonoBehaviour
     public Wave[] Waves;
     public Enemy Enemy;
 
+    public event Action<int> OnNewWave;
+
     private LivingEntity _playerEntity;
     private Transform _playerTransform;
 
@@ -34,6 +36,7 @@ public class Spawner : MonoBehaviour
         _campPositionOld = _playerTransform.position;
         
         _map = FindObjectOfType<MapGenerator>();
+
         NextWave();
     }
 
@@ -56,6 +59,11 @@ public class Spawner : MonoBehaviour
 
             StartCoroutine(SpawnEnemy());
         }
+    }
+
+    void ResetPlayerPosition()
+    {
+        _playerTransform.position = _map.GetTileFromPosition(Vector3.zero).position + Vector3.up * 2f;
     }
 
     IEnumerator SpawnEnemy()
@@ -110,6 +118,13 @@ public class Spawner : MonoBehaviour
             _currentWave = Waves[_currentWaveNumber - 1];
             _enemiesRemainingToSpwan = _currentWave.EnemyCount;
             _enemiesRemainingAlive = _enemiesRemainingToSpwan;
+
+            if (OnNewWave != null)
+            {
+                OnNewWave(_currentWaveNumber);
+            }
+
+            ResetPlayerPosition();
         }
     }
     

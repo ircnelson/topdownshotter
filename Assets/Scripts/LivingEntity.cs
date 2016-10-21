@@ -20,7 +20,8 @@ public abstract class LivingEntity : MonoBehaviour, IDamageable
         TakeDamage(damage);
     }
 
-    private void Die()
+    [ContextMenu("Self Destruct")]
+    protected void Die()
     {
         Dead = true;
 
