@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerComponent : MonoBehaviour {
+public class PlayerController : MonoBehaviour {
 
     private Vector3 _velocity;
     private Rigidbody _rigidbody;
