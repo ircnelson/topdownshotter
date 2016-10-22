@@ -7,8 +7,8 @@ public class Shell : MonoBehaviour
     public float ForceMin;
 
     private Rigidbody _rigidbody;
-    private float _lifetime;
-    private float _fadetime;
+    private float _lifetime = 4;
+    private float _fadetime = 2;
     
     void Start ()
     {
@@ -36,7 +36,7 @@ public class Shell : MonoBehaviour
 
         while (percent < 1)
         {
-            percent += Time.deltaTime * _fadetime;
+            percent += Time.deltaTime * fadeSpeed;
             material.color = Color.Lerp(initialColor, Color.clear, percent);
 
             yield return null;

@@ -4,6 +4,8 @@ public class Projectile : MonoBehaviour
 {
     public LayerMask CollisionMask;
 
+    public Color TrailColor;
+
     private float _speed;
     private float _damage = 1;
     private float _lifetime = 2;
@@ -24,6 +26,8 @@ public class Projectile : MonoBehaviour
         {
             OnHitObject(initialCollisions[0], transform.position);
         }
+
+        GetComponent<TrailRenderer>().material.SetColor("_TintColor", TrailColor);
     }
 
     void Update()

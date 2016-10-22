@@ -47,7 +47,12 @@ public class Player : LivingEntity
         // Weapon
         if (Input.GetMouseButton(0))
         {
-            _gunController.Shoot();
+            _gunController.OnTriggerHold();
         }
-	}
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            _gunController.OnTriggerRelease();
+        }
+    }
 }
