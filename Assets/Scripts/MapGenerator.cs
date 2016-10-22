@@ -12,7 +12,9 @@ public class MapGenerator : MonoBehaviour
     public Transform ObstaclePrefab;
     public Transform TilePrefab;
     public Vector2 MaxMapSize;
-    
+
+    public Transform MapFloor;
+
     public Transform NavmeshFloor;
 
     [Range(0, 1)]
@@ -46,8 +48,7 @@ public class MapGenerator : MonoBehaviour
         _tileMap = new Transform[_currentMap.MapSize.X, _currentMap.MapSize.Y];
 
         System.Random prng = new System.Random(_currentMap.Seed);
-        GetComponent<BoxCollider>().size = new Vector3(_currentMap.MapSize.X * TileSize, .05f, _currentMap.MapSize.Y * TileSize);
-
+        
         // Generating coords
         _allTileCoords = new List<Coord>();
         for (int x = 0; x < _currentMap.MapSize.X; x++)
@@ -130,6 +131,8 @@ public class MapGenerator : MonoBehaviour
         CreateBorders(mapHolder);
 
         NavmeshFloor.localScale = new Vector3(MaxMapSize.x, MaxMapSize.y) * TileSize;
+        
+        MapFloor.localScale = new Vector3(_currentMap.MapSize.X * TileSize, _currentMap.MapSize.Y * TileSize);
     }
 
     public Transform GetTileFromPosition(Vector3 position)

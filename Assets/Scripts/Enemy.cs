@@ -31,27 +31,31 @@ public class Enemy : LivingEntity
     private LivingEntity _targetEntity;
     private bool _hasTarget;
 
-    protected override void Start()
+    void Awake()
     {
-        base.Start();
-
         _pathFinder = GetComponent<NavMeshAgent>();
-        _skinMaterial = GetComponent<Renderer>().material;
-        _originalColor = _skinMaterial.color;
-        
+
         if (GameObject.FindGameObjectWithTag("Player") != null)
         {
-            _currentState = State.Chasing;
-            
             _target = GameObject.FindGameObjectWithTag("Player").transform;
             _targetEntity = _target.GetComponent<LivingEntity>();
-            _targetEntity.OnDeath += OnTargetDeath;
 
             _hasTarget = true;
 
             _myCollisionRadius = GetComponent<CapsuleCollider>().radius;
             _targetCollisionRadius = _target.GetComponent<CapsuleCollider>().radius;
+        }
+    }
 
+    protected override void Start()
+    {
+        base.Start();
+        
+        if (_hasTarget)
+        {
+            _currentState = State.Chasing;
+            _targetEntity.OnDeath += OnTargetDeath;
+            
             StartCoroutine(UpdatePath());
         }
     }
@@ -109,6 +113,23 @@ public class Enemy : LivingEntity
         _currentState = State.Chasing;
         _pathFinder.enabled = true;
         _skinMaterial.color = _originalColor;
+    }
+
+    public void SetCharacteristics(float moveSpeed, int hitsToKillPlayer, float enemyHealth, Color skinColor)
+    {
+        _pathFinder.speed = moveSpeed;
+        
+        if (_hasTarget)
+        {
+            _damage = Mathf.Ceil(_targetEntity.StartHealth / hitsToKillPlayer);
+        }
+
+        StartHealth = enemyHealth;
+
+        _skinMaterial = GetComponent<Renderer>().material;
+        _skinMaterial.color = skinColor;
+
+        _originalColor = _skinMaterial.color;
     }
 
     IEnumerator UpdatePath()
