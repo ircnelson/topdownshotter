@@ -15,7 +15,7 @@ public abstract class LivingEntity : MonoBehaviour, IDamageable
         Health = StartHealth;
     }
 
-    public void TakeHit(float damage, RaycastHit hit)
+    public virtual void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
     {
         TakeDamage(damage);
     }
@@ -33,7 +33,7 @@ public abstract class LivingEntity : MonoBehaviour, IDamageable
         GameObject.Destroy(gameObject);
     }
 
-    public void TakeDamage(float damage)
+    public virtual void TakeDamage(float damage)
     {
         Health -= damage;
 

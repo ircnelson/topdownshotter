@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 
 public class Projectile : MonoBehaviour
 {
@@ -24,7 +22,7 @@ public class Projectile : MonoBehaviour
 
         if (initialCollisions.Length > 0)
         {
-            OnHitObject(initialCollisions[0]);
+            OnHitObject(initialCollisions[0], transform.position);
         }
     }
 
@@ -45,29 +43,17 @@ public class Projectile : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, moveDistance + _skinWidth, CollisionMask, QueryTriggerInteraction.Collide))
         {
-            OnHitObject(hit);
+            OnHitObject(hit.collider, hit.point);
         }
     }
 
-    private void OnHitObject(RaycastHit hit)
-    {
-        IDamageable damageableObject = hit.collider.GetComponent<IDamageable>();
-
-        if (damageableObject != null)
-        {
-            damageableObject.TakeHit(_damage, hit);
-        }
-
-        GameObject.Destroy(gameObject);
-    }
-
-    private void OnHitObject(Collider c)
+    private void OnHitObject(Collider c, Vector3 hitPoint)
     {
         IDamageable damageableObject = c.GetComponent<IDamageable>();
 
         if (damageableObject != null)
         {
-            damageableObject.TakeDamage(_damage);
+            damageableObject.TakeHit(_damage, hitPoint, transform.forward);
         }
 
         GameObject.Destroy(gameObject);

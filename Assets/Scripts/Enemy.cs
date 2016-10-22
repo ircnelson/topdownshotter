@@ -7,6 +7,9 @@ public class Enemy : LivingEntity
 {
     public enum State { Idle, Chasing, Attacking };
 
+    public ParticleSystem DeathEffect;
+    public Color AttackColor = Color.red;
+
     private Material _skinMaterial;
     private Color _originalColor;
 
@@ -84,7 +87,7 @@ public class Enemy : LivingEntity
         float percent = 0;
         float attackSpeed = 3;
 
-        _skinMaterial.color = Color.red;
+        _skinMaterial.color = AttackColor;
         bool hasAppliedDamage = false;
 
         while (percent <= 1)
@@ -128,6 +131,16 @@ public class Enemy : LivingEntity
 
             yield return new WaitForSeconds(refreshRate);
         }
+    }
+
+    public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
+    {
+        if (damage >= Health)
+        {
+            Destroy(Instantiate(DeathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection)), DeathEffect.startLifetime);
+        }
+
+        base.TakeHit(damage, hitPoint, hitDirection);
     }
 
     private void OnTargetDeath()
