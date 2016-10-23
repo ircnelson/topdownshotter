@@ -108,7 +108,7 @@ public class Gun : MonoBehaviour
     {
         if (!_isReloading && _projectilesRemainingInMag != ProjectilesPerMag)
         {
-            StartCoroutine(AnimateReload());
+            StartCoroutine("AnimateReload");
         }
     }
 

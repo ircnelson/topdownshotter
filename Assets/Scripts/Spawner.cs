@@ -59,7 +59,7 @@ public class Spawner : MonoBehaviour
             _enemiesRemainingToSpwan--;
             _nextSpawnTime = Time.time + _currentWave.TimeBetweenSpawns;
 
-            StartCoroutine(SpawnEnemy());
+            StartCoroutine("SpawnEnemy");
         }
 
         if (DevMode)
@@ -71,7 +71,7 @@ public class Spawner : MonoBehaviour
                     GameObject.Destroy(enemy.gameObject);
                 }
 
-                StopCoroutine(SpawnEnemy());
+                StopCoroutine("SpawnEnemy");
 
                 NextWave();
             }

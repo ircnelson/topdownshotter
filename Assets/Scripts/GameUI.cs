@@ -25,8 +25,8 @@ public class GameUI : MonoBehaviour
     
     void OnNewWave(int waveNumber)
     {
-        StopCoroutine(AnimateNewWaveBanner());
-        StartCoroutine(AnimateNewWaveBanner());
+        StopCoroutine("AnimateNewWaveBanner");
+        StartCoroutine("AnimateNewWaveBanner");
     }
 
     IEnumerator AnimateNewWaveBanner()
