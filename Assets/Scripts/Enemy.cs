@@ -126,7 +126,7 @@ public class Enemy : LivingEntity
 
         StartHealth = enemyHealth;
 
-        _skinMaterial = GetComponent<Renderer>().material;
+        _skinMaterial = GetComponent<Renderer>().sharedMaterial;
         _skinMaterial.color = skinColor;
 
         _originalColor = _skinMaterial.color;
