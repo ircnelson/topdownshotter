@@ -5,6 +5,14 @@ public class GunController : MonoBehaviour
     public Transform WeaponHold;
     public Gun StartingGun;
 
+    public float GunHeight
+    {
+        get
+        {
+            return WeaponHold.position.y;
+        }
+    }
+
     private Gun _equippedGun;
 
     void Start()
@@ -41,12 +49,20 @@ public class GunController : MonoBehaviour
             _equippedGun.OnTriggerRelease();
         }
     }
-
-    public float GunHeight
+    
+    public void Aim(Vector3 aimPoint)
     {
-        get
+        if (_equippedGun != null)
         {
-            return WeaponHold.position.y;
+            _equippedGun.Aim(aimPoint);
+        }
+    }
+
+    public void Reload()
+    {
+        if (_equippedGun != null)
+        {
+            _equippedGun.Reload();
         }
     }
 }

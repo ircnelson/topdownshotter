@@ -47,6 +47,11 @@ public class Player : LivingEntity
 
             Crosshairs.transform.position = point;
             Crosshairs.DetectTargets(ray);
+
+            if ((new Vector2(point.x, point.y) - new Vector2(transform.position.x, transform.position.y)).sqrMagnitude > 1)
+            {
+                _gunController.Aim(point);
+            }
         }
 
         // Weapon
@@ -58,6 +63,13 @@ public class Player : LivingEntity
         if (Input.GetMouseButtonUp(0))
         {
             _gunController.OnTriggerRelease();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            print("R");
+
+            _gunController.Reload();
         }
     }
 }
