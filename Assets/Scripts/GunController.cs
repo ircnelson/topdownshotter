@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
 
 public class GunController : MonoBehaviour
 {
@@ -41,6 +39,14 @@ public class GunController : MonoBehaviour
         if (_equippedGun != null)
         {
             _equippedGun.OnTriggerRelease();
+        }
+    }
+
+    public float GunHeight
+    {
+        get
+        {
+            return WeaponHold.position.y;
         }
     }
 }
