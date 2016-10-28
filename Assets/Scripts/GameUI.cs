@@ -7,7 +7,8 @@ using System;
 public class GameUI : MonoBehaviour
 {
     public Image FadePlane;
-    public Transform GameOverUI;
+    public GameObject GameOverUI;
+    public GameObject MenuOptionsUI;
 
     public RectTransform NewWaveBanner;
 
@@ -19,10 +20,19 @@ public class GameUI : MonoBehaviour
         _spawner.OnNewWave += OnNewWave;
     }
 
-	void Start () {
+    void Start()
+    {
         FindObjectOfType<Player>().OnDeath += OnGameOver;
-	}
-    
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            MenuOptions();
+        }
+    }
+
     void OnNewWave(int waveNumber)
     {
         StopCoroutine("AnimateNewWaveBanner");
@@ -58,10 +68,22 @@ public class GameUI : MonoBehaviour
         }
     }
 
+    void MenuOptions()
+    {
+        Cursor.visible = true;
+
+        Time.timeScale = (!MenuOptionsUI.activeInHierarchy ? 0 : 1);
+
+        MenuOptionsUI.SetActive(!MenuOptionsUI.activeInHierarchy);
+    }
+
     void OnGameOver()
     {
-        StartCoroutine(Fade(Color.clear, Color.black, 1));
-        GameOverUI.gameObject.SetActive(true);
+        Cursor.visible = true;
+
+        StartCoroutine(Fade(Color.clear, new Color(0, 0, 0, .95f), 1));
+
+        GameOverUI.SetActive(true);
     }
 
     IEnumerator Fade(Color from, Color to, float time)

@@ -7,7 +7,8 @@ public abstract class LivingEntity : MonoBehaviour, IDamageable
 
     public event Action OnDeath;
 
-    protected float Health;
+    public float Health { get; protected set; }
+
     protected bool Dead;
 
     protected virtual void Start()
