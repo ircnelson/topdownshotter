@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopDownShotting.CSharp", "TopDownShotting.CSharp.csproj", "{54D2A7EA-A6D3-EEB4-864C-CC43BC161495}"
+# Visual Studio 2017
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopDownShotting", "TopDownShotting.csproj", "{128B5FF0-FB53-73B5-7A69-58276E383F54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopDownShotting.CSharp.Editor", "TopDownShotting.CSharp.Editor.csproj", "{1568E88F-AF60-1D2B-D251-275850C019FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopDownShotting.Editor", "TopDownShotting.Editor.csproj", "{DD52F67E-691D-4AE2-CB0D-2F3B69793C61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,14 +11,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{54D2A7EA-A6D3-EEB4-864C-CC43BC161495}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{54D2A7EA-A6D3-EEB4-864C-CC43BC161495}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{54D2A7EA-A6D3-EEB4-864C-CC43BC161495}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{54D2A7EA-A6D3-EEB4-864C-CC43BC161495}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1568E88F-AF60-1D2B-D251-275850C019FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1568E88F-AF60-1D2B-D251-275850C019FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1568E88F-AF60-1D2B-D251-275850C019FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1568E88F-AF60-1D2B-D251-275850C019FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{128B5FF0-FB53-73B5-7A69-58276E383F54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{128B5FF0-FB53-73B5-7A69-58276E383F54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{128B5FF0-FB53-73B5-7A69-58276E383F54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{128B5FF0-FB53-73B5-7A69-58276E383F54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD52F67E-691D-4AE2-CB0D-2F3B69793C61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD52F67E-691D-4AE2-CB0D-2F3B69793C61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD52F67E-691D-4AE2-CB0D-2F3B69793C61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD52F67E-691D-4AE2-CB0D-2F3B69793C61}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
